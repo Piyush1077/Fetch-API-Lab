@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Fetch API Exercise Lab</title>
+  </head>
+  <body>
+    <div id="container">
+      <h1>The Fetch API Exercises</h1>
+      <p>Open the web inspector console to test.</p>
+      <button name="loadPhoto" id="load-photo">Load Dog Photo</button>
+      <div id="photo"></div>
+    </div>
+  </body>
+  <script>
+    // Place your code below this line
+      
+    function getRandomDogPhoto(){
+      return fetch("https://dog.ceo/api/breeds/image/random")
+      .then(response=> response.json()
+      )
+      .catch(error=> alert(error)
+      )
+    }
+
+    button = document.getElementById("load-photo");
+
+    function handleButton() {
+        apiCall()
+      }
+   
+    async function init() {
+      
+      button.addEventListener("click", handleButton)
+      
+    }
+
+    async function apiCall(){
+
+      loadSpinner()
+      let data = await getRandomDogPhoto()
+      .then(function(data) {
+        console.log(data)
+        removeSpinner()
+        renderDogPhoto(data.message)
+      });
+
+    }
+    
+
+    function renderDogPhoto(url) {
+      var div = document.getElementById("photo")
+          var img = document.createElement("img")
+          div.innerHTML = ""
+          div.appendChild(img)
+          img.src = url
+          img.alt = "Random photo of a dog"
+    }
+
+    function loadSpinner() {
+      const spinner = `../assets/loader.svg`;
+      const img = `<img src="${spinner}" id="spinner" alt="Loading spinner image" />`;
+      document.querySelector(`#container`).insertAdjacentHTML(`beforeend`, img);
+      button.disabled = true
+    }
+
+    function removeSpinner() {
+      const spinner = document.querySelector(`img#spinner`);
+      spinner.parentElement.removeChild(spinner);
+      button.disabled = false
+    }
+
+    init();
+  </script>
+</html>
